@@ -150,26 +150,6 @@ public class KarteResource extends AbstractResource {
     }
 
     @GET
-    @Path("/docinfoList/{param}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public KarteBeanListConverter getDocumentHistoryList(@PathParam("param") String param) {
-
-        debug(param);
-        String[] params = param.split(CAMMA);
-        long patientPK = Long.parseLong(params[0]);
-        Date fromDate = parseDate(params[1]);
-
-        List<KarteBean> beans = karteServiceBean.getKarteHistory(patientPK, fromDate);
-        KarteList wrapper = new KarteList();
-        wrapper.setList(beans);
-
-        KarteBeanListConverter conv = new KarteBeanListConverter();
-        conv.setModel(wrapper);
-
-        return conv;
-    }
-
-    @GET
     @Path("/documents/{param}")
     @Produces(MediaType.APPLICATION_JSON)
     public DocumentListConverter getDocuments(@Context HttpServletRequest servletReq, @PathParam("param") String param) {
@@ -181,14 +161,7 @@ public class KarteResource extends AbstractResource {
             list.add(Long.parseLong(s));
         }
 
-        //- debug
-        //System.out.println("debug->" + servletReq.getHeader("clientVersion"));
-        String clientVersion = servletReq.getHeader("clientVersion");
-        
         List<DocumentModel> result = karteServiceBean.getDocuments(list);
-        
-//        if(clientVersion.isEmpty()) {
-//        }
         DocumentList wrapper = new DocumentList();
         wrapper.setList(result);
 
